@@ -6,13 +6,11 @@ using GameInput;
 using PoolsSystem;
 using Projectiles;
 using Screens.GameHud;
-using UnityEditor;
 using UnityEngine;
-using Utils.MeshGenerator;
 
-namespace StateMachine
+namespace Installers
 {
-    public class TempMainSceneInstaller : MonoBehaviour
+    public class GameSceneInstaller : MonoBehaviour
     {
         [SerializeField] private GameInputSystem gameInputSystem;
         [SerializeField] private CanonView canonView;
@@ -47,6 +45,7 @@ namespace StateMachine
 
         private void OnDestroy()
         {
+            _canonSettingsProxy.Dispose();
             _canonPresenter.Dispose();
             _hudPresenter.Dispose();
         }

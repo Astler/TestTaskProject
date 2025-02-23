@@ -63,7 +63,7 @@ namespace Canon
 
         private void HandleAimDeltaChanged(Vector2 aimDelta)
         {
-            _canonView.UpdateAim(aimDelta);
+            _canonView.UpdateAim(aimDelta * _canonSettingsProxy.Sensitivity.Value);
             UpdateTrajectory();
         }
 
