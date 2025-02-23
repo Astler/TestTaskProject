@@ -27,7 +27,9 @@ namespace MarkableWall
             _instancedMaterial.SetTexture(MarksTexture, _marksTexture);
             meshRenderer.material = _instancedMaterial;
 
-            _wallSize = 10f;
+            _wallSize = ProjectConstants.DefaultPlaneSize;
+
+            ClearTexture();
         }
 
         public void AddMark(RaycastHit hit)
@@ -59,6 +61,14 @@ namespace MarkableWall
             Graphics.DrawTexture(markRect, markTexture);
 
             GL.PopMatrix();
+            RenderTexture.active = prevRT;
+        }
+
+        private void ClearTexture()
+        {
+            RenderTexture prevRT = RenderTexture.active;
+            RenderTexture.active = _marksTexture;
+            GL.Clear(false, true, Color.clear);
             RenderTexture.active = prevRT;
         }
 
