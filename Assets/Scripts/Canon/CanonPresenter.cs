@@ -1,10 +1,12 @@
 ﻿using System;
+using Audio;
 using Data;
 using Explosion;
 using GameCamera;
 using UnityEngine;
 using GameInput;
 using Projectiles;
+using Random = UnityEngine.Random;
 
 namespace Canon
 {
@@ -45,8 +47,12 @@ namespace Canon
         private void HandleShotClicked()
         {
             float powerCoefficient = _currentPower / 100f;
+
+            AudioSystem.Play(AudioClipName.Shot, target: _canonView.ShotPosition, volume: 1f,
+                pitch: Random.Range(0.8f, 0.9f));
             _cameraController.RequestShake(0.2f, Mathf.Lerp(0.05f, 0.35f, powerCoefficient));
             _canonView.PlayRecoilAnimation(Mathf.Lerp(0.25f, 0.75f, powerCoefficient));
+
             ProjectileView projectile = _projectilesFactory.Create(_canonView.ShotPosition.position,
                 _canonView.ShotPosition.forward, _currentPower);
 

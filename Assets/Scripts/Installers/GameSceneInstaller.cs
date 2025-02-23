@@ -1,4 +1,6 @@
-﻿using Canon;
+﻿using Assets;
+using Audio;
+using Canon;
 using Data;
 using Explosion;
 using GameCamera;
@@ -12,10 +14,14 @@ namespace Installers
 {
     public class GameSceneInstaller : MonoBehaviour
     {
-        [SerializeField] private GameInputSystem gameInputSystem;
+        [Header("Configs/Assets So")] [SerializeField]
+        private PoolConfig poolSettings;
+
+        [Header("Game Scene Elements")] [SerializeField]
+        private GameInputSystem gameInputSystem;
+
         [SerializeField] private CanonView canonView;
         [SerializeField] private GameHugView hudView;
-        [SerializeField] private PoolConfig poolSettings;
         [SerializeField] private CameraController cameraController;
 
         private CanonPresenter _canonPresenter;
@@ -38,6 +44,8 @@ namespace Installers
 
         private void Start()
         {
+            AudioSystem.PlayMusic(AudioClipName.Music);
+
             _poolsSystem.Initialize();
             _canonPresenter.Initialize();
             _hudPresenter.Initialize();

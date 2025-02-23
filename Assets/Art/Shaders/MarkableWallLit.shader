@@ -6,7 +6,7 @@
         [MainColor] _BaseColor("Base Color", Color) = (1, 1, 1, 1)
         _MarksTexture("Marks Texture", 2D) = "black" {}
         _MarkStrength("Mark Strength", Range(0, 1)) = 1
-        
+
         _Smoothness("Smoothness", Range(0.0, 1.0)) = 0.5
         _Metallic("Metallic", Range(0.0, 1.0)) = 0.0
         [Toggle(_NORMALMAP)] _NORMALMAP("Normal Map", Float) = 0
@@ -15,18 +15,23 @@
 
     SubShader
     {
-        Tags { "RenderType" = "Opaque" "RenderPipeline" = "UniversalPipeline" "Queue" = "Geometry" }
+        Tags
+        {
+            "RenderType" = "Opaque" "RenderPipeline" = "UniversalPipeline" "Queue" = "Geometry"
+        }
 
         Pass
         {
             Name "ForwardLit"
-            Tags { "LightMode" = "UniversalForward" }
+            Tags
+            {
+                "LightMode" = "UniversalForward"
+            }
 
             HLSLPROGRAM
             #pragma vertex LitPassVertex
             #pragma fragment LitPassFragment
 
-            // Lit шейдер features
             #pragma shader_feature_local _NORMALMAP
             #pragma shader_feature_local_fragment _ALPHATEST_ON
             #pragma shader_feature_local_fragment _ALPHAPREMULTIPLY_ON
@@ -104,16 +109,12 @@
                 UNITY_SETUP_INSTANCE_ID(input);
                 UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(input);
 
-                // Сэмплируем основную текстуру
                 half4 baseColor = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, input.uv) * _BaseColor;
 
-                // Сэмплируем текстуру отметок
                 half4 marksColor = SAMPLE_TEXTURE2D(_MarksTexture, sampler_MarksTexture, input.uv);
 
-                // Смешиваем основную текстуру с отметками
                 half4 albedo = lerp(baseColor, marksColor, marksColor.a * _MarkStrength);
 
-                // Настройка поверхности
                 SurfaceData surfaceData = (SurfaceData)0;
                 surfaceData.albedo = albedo.rgb;
                 surfaceData.metallic = _Metallic;
@@ -123,24 +124,24 @@
                 surfaceData.emission = 0;
                 surfaceData.alpha = 1;
 
-                // Настройка входных данных для освещения
                 InputData inputData = (InputData)0;
                 inputData.positionWS = input.positionWS;
                 inputData.normalWS = NormalizeNormalPerPixel(input.normalWS);
                 inputData.viewDirectionWS = GetWorldSpaceNormalizeViewDir(input.positionWS);
                 inputData.shadowCoord = TransformWorldToShadowCoord(input.positionWS);
 
-                // Финальный цвет с освещением
                 return UniversalFragmentPBR(inputData, surfaceData);
             }
             ENDHLSL
         }
 
-        // ShadowCaster pass для теней
         Pass
         {
             Name "ShadowCaster"
-            Tags{"LightMode" = "ShadowCaster"}
+            Tags
+            {
+                "LightMode" = "ShadowCaster"
+            }
 
             ZWrite On
             ZTest LEqual
@@ -156,14 +157,14 @@
 
             struct Attributes
             {
-                float4 positionOS   : POSITION;
-                float3 normalOS     : NORMAL;
+                float4 positionOS : POSITION;
+                float3 normalOS : NORMAL;
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 
             struct Varyings
             {
-                float4 positionCS   : SV_POSITION;
+                float4 positionCS : SV_POSITION;
                 UNITY_VERTEX_INPUT_INSTANCE_ID
                 UNITY_VERTEX_OUTPUT_STEREO
             };

@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using Audio;
 using PoolsSystem;
 using UnityEngine;
 
@@ -21,6 +22,7 @@ namespace Explosion
             base.OnSpawned(spawnInfo);
             _transform.position = spawnInfo.WorldPosition;
             particle.Play(true);
+            AudioSystem.Play(AudioClipName.Explosion, target: _transform);
 
             StartCoroutine(DespawnTimer());
         }
