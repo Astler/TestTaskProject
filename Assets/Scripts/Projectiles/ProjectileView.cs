@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using MarkableWall;
 using PoolsSystem;
 using UnityEngine;
@@ -10,10 +11,10 @@ namespace Projectiles
     {
         [SerializeField] private MeshFilter meshFilter;
         [SerializeField] private SphereCollider sphereCollider;
-        [SerializeField] private float projectileSpeed = 10f;
         [SerializeField] private LayerMask collisionMask;
         [SerializeField] private float bounciness = 0.6f;
         [SerializeField] private int maxBounces = 2;
+        [SerializeField] private float lifeTime = 4f;
 
         private Vector3 _position;
         private Vector3 _velocity;
@@ -22,6 +23,7 @@ namespace Projectiles
         private Vector3 _lastBounceNormal;
         private bool _justBounced;
         private Transform _transform;
+        private Coroutine _timer;
 
         public Vector3 Position => _transform.position;
 
@@ -47,6 +49,14 @@ namespace Projectiles
             _isFlying = true;
 
             _bounces = 0;
+
+            _timer = StartCoroutine(DespawnTimer());
+        }
+
+        private IEnumerator DespawnTimer()
+        {
+            yield return new WaitForSeconds(lifeTime);
+            Explode();
         }
 
         private void FixedUpdate()
@@ -99,6 +109,11 @@ namespace Projectiles
 
         private void Explode()
         {
+            if (_timer != null)
+            {
+                StopCoroutine(_timer);
+            }
+
             _isFlying = false;
             OnExplode?.Invoke(this);
             Despawn();

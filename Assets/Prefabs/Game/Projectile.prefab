@@ -126,3 +126,4 @@ MonoBehaviour:
     m_Bits: 384
   bounciness: 0.6
   maxBounces: 2
+  lifeTime: 3

@@ -8,6 +8,7 @@ namespace Explosion
     public class ExplosionView : BasePoolable<ExplosionView, ExplosionSpawnInfo>
     {
         [SerializeField] private ParticleSystem particle;
+        [SerializeField] private AudioSource explosionClip;
         [SerializeField] private float lifeTime = 1.5f;
 
         private Transform _transform;
@@ -22,7 +23,7 @@ namespace Explosion
             base.OnSpawned(spawnInfo);
             _transform.position = spawnInfo.WorldPosition;
             particle.Play(true);
-            AudioSystem.Play(AudioClipName.Explosion, target: _transform);
+            explosionClip.Play();
 
             StartCoroutine(DespawnTimer());
         }

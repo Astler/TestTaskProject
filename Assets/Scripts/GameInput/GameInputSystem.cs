@@ -48,6 +48,8 @@ namespace GameInput
 
         private void OnDisable()
         {
+            if (_canonInput == null) return;
+
             _canonInput.Disable();
             _canonInput.Canon.AimDelta.performed -= HandleAimInput;
             _canonInput.Canon.AimCompose.performed -= HandleAimComposeInput;
