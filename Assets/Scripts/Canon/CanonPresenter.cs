@@ -17,6 +17,7 @@ namespace Canon
         private readonly ProjectilesFactory _projectilesFactory;
         private readonly CameraController _cameraController;
         private readonly ExplosionsFactory _explosionsFactory;
+        private readonly TrajectoryRenderer _trajectoryView;
         private readonly CanonView _canonView;
         private IDisposable _powerListener;
         private int _currentPower;
@@ -31,6 +32,7 @@ namespace Canon
             _cameraController = cameraController;
             _explosionsFactory = explosionsFactory;
             _canonView = canonView;
+            _trajectoryView = _canonView.TrajectoryRenderer;
         }
 
         public void Initialize()
@@ -76,13 +78,14 @@ namespace Canon
         private void UpdateTrajectory()
         {
             Vector3 velocity = _canonView.ShotPosition.forward * _currentPower;
-            _canonView.TrajectoryRenderer.UpdateTrajectory(_canonView.ShotPosition.position, velocity);
+            _trajectoryView.UpdateTrajectory(_canonView.ShotPosition.position, velocity);
         }
 
         public void Dispose()
         {
             _powerListener?.Dispose();
             _gameInputSystem.AimDeltaChanged -= HandleAimDeltaChanged;
+            _gameInputSystem.ShotClicked -= HandleShotClicked;
         }
     }
 }
